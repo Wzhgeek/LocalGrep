@@ -1,5 +1,4 @@
-# 打 tag（例如 v0.1.0）并推送到 origin 后构建各平台安装包，并发布到 GitHub Release。
-# 或：在 GitHub「Actions」里手动运行本 workflow（workflow_dispatch）。
+# 推送 v* 标签后，在 macOS / Linux / Windows 上构建并发布到 GitHub Release。
 
 name: release
 

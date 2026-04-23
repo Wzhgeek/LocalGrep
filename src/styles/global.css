@@ -59,6 +59,76 @@ body {
   background: #0f172a;
 }
 
+.settings-hint {
+  font-size: 13px;
+  color: #9ca3af;
+  line-height: 1.5;
+}
+
+.settings-hint code {
+  display: block;
+  margin-top: 6px;
+  word-break: break-all;
+}
+
+.settings-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.settings-row input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #4b5563;
+  background: #1f2937;
+  color: inherit;
+}
+
+.settings-row button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #2563eb;
+  background: #1d4ed8;
+  color: #f9fafb;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.settings-row button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.settings-message {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #fbbf24;
+}
+
+.settings-roots {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+}
+
+.settings-status {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.result-empty {
+  font-size: 13px;
+  color: #9ca3af;
+  line-height: 1.5;
+}
+
+.status-bar-error {
+  color: #f87171;
+}
+
 .status-bar {
   display: flex;
   gap: 16px;

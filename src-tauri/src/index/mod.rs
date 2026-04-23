@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use anyhow::Result;
 use tantivy::collector::TopDocs;
-use tantivy::query::QueryParser;
+use tantivy::query::{AllQuery, Query, QueryParser};
 use tantivy::schema::{SchemaBuilder, Value, FAST, STORED, STRING, TEXT};
 use tantivy::{doc, Index};
 
@@ -85,8 +85,13 @@ impl IndexService {
     let file_id_field = schema.get_field("file_id")?;
 
     let parser = QueryParser::for_index(&self.index, vec![filename_field, content_field]);
-    let query = parser.parse_query(query)?;
-    let top_docs = searcher.search(&query, &TopDocs::with_limit(limit))?;
+    let trimmed = query.trim();
+    let query_obj: Box<dyn Query> = if trimmed.is_empty() || trimmed == "*" {
+      Box::new(AllQuery)
+    } else {
+      parser.parse_query(trimmed)?
+    };
+    let top_docs = searcher.search(&*query_obj, &TopDocs::with_limit(limit))?;
     let mut out = Vec::new();
     for (_, addr) in top_docs {
       let doc = searcher.doc::<tantivy::TantivyDocument>(addr)?;

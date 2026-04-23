@@ -9,7 +9,7 @@ import { useSearch } from '../hooks/useSearch';
 
 export function SearchPage() {
   const [query, setQuery] = useState('');
-  const { hits, total, tookMs } = useSearch(query);
+  const { hits, total, tookMs, error } = useSearch(query);
 
   return (
     <main className="layout">
@@ -20,7 +20,7 @@ export function SearchPage() {
         <PreviewPanel />
         <SettingsPanel />
       </section>
-      <StatusBar total={total} tookMs={tookMs} />
+      <StatusBar total={total} tookMs={tookMs} searchError={error} />
     </main>
   );
 }

@@ -1,16 +1,16 @@
 #[derive(Debug, Clone)]
 pub enum WatchEvent {
-  FileCreated(String),
-  FileModified(String),
-  FileDeleted(String),
-  FileRenamed { from: String, to: String },
+  Created(String),
+  Modified(String),
+  Deleted(String),
+  Renamed { from: String, to: String },
 }
 
 pub fn normalize_event(kind: &str, path: &str) -> Option<WatchEvent> {
   match kind {
-    "create" => Some(WatchEvent::FileCreated(path.to_string())),
-    "modify" => Some(WatchEvent::FileModified(path.to_string())),
-    "remove" => Some(WatchEvent::FileDeleted(path.to_string())),
+    "create" => Some(WatchEvent::Created(path.to_string())),
+    "modify" => Some(WatchEvent::Modified(path.to_string())),
+    "remove" => Some(WatchEvent::Deleted(path.to_string())),
     _ => None,
   }
 }

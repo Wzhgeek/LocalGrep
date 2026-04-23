@@ -23,7 +23,9 @@ impl ScanService {
       .lock()
       .map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
     let mut stmt = conn.prepare("SELECT id, path FROM roots WHERE enabled = 1 ORDER BY id ASC")?;
-    let rows = stmt.query_map([], |row| Ok((row.get::<_, i64>(0)?, row.get::<_, String>(1)?)))?;
+    let rows = stmt.query_map([], |row| {
+      Ok((row.get::<_, i64>(0)?, row.get::<_, String>(1)?))
+    })?;
     let mut roots: Vec<(i64, String)> = Vec::new();
     for row in rows {
       roots.push(row?);
@@ -91,7 +93,9 @@ impl ScanService {
           .enqueue("index_file", serde_json::json!({ "path": path }))?;
         existing_paths.push(candidate.path);
       }
-      self._db.mark_missing_files_by_root(root_id, &existing_paths)?;
+      self
+        ._db
+        .mark_missing_files_by_root(root_id, &existing_paths)?;
     }
 
     Ok(())

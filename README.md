@@ -44,6 +44,23 @@
 - **Rust** 稳定版（`rustup` 安装 `stable`），用于 `src-tauri` 编译
 - 开发 Tauri 桌面端时，需按 [Tauri 官方文档](https://v2.tauri.app/start/prerequisites/) 准备各平台依赖
 
+安装好 Rust 后，可在本机完整验证与 CI 相同的检查（与 GitHub Actions 中 `rust` job 一致）：
+
+```bash
+cd src-tauri
+cargo fmt --all -- --check
+cargo clippy --all-targets --all-features -- -D warnings
+cargo test
+cargo build --release
+```
+
+打桌面包：
+
+```bash
+npm run build
+npm run tauri -- build
+```
+
 ## 开发
 
 ```bash

@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use anyhow::Result;
 use tantivy::collector::TopDocs;
 use tantivy::query::QueryParser;
-use tantivy::schema::{FAST, STORED, STRING, SchemaBuilder, TEXT};
+use tantivy::schema::{SchemaBuilder, Value, FAST, STORED, STRING, TEXT};
 use tantivy::{doc, Index};
 
 #[derive(Clone)]
@@ -39,7 +39,13 @@ impl IndexService {
     &self.index
   }
 
-  pub fn index_text_document(&self, file_id: i64, path: &str, filename: &str, content: &str) -> Result<()> {
+  pub fn index_text_document(
+    &self,
+    file_id: i64,
+    path: &str,
+    filename: &str,
+    content: &str,
+  ) -> Result<()> {
     let schema = self.index.schema();
     let file_id_field = schema.get_field("file_id")?;
     let path_field = schema.get_field("path")?;

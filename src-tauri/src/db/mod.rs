@@ -23,13 +23,19 @@ impl Database {
   }
 
   pub fn run_migrations(&self) -> Result<()> {
-    let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
+    let conn = self
+      .conn
+      .lock()
+      .map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
     conn.execute_batch(include_str!("../sql/001_init.sql"))?;
     Ok(())
   }
 
   pub fn get_settings(&self) -> Result<Settings> {
-    let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
+    let conn = self
+      .conn
+      .lock()
+      .map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
     let mut stmt = conn.prepare("SELECT value_json FROM settings WHERE key = ?1")?;
     let payload = stmt
       .query_row(["app_settings"], |row| row.get::<_, String>(0))
@@ -42,7 +48,10 @@ impl Database {
 
   pub fn save_settings(&self, settings: Settings) -> Result<()> {
     let payload = serde_json::to_string(&settings)?;
-    let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
+    let conn = self
+      .conn
+      .lock()
+      .map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
     conn.execute(
       "INSERT INTO settings (key, value_json) VALUES (?1, ?2) ON CONFLICT(key) DO UPDATE SET value_json=excluded.value_json",
       params!["app_settings", payload],
@@ -51,7 +60,10 @@ impl Database {
   }
 
   pub fn list_roots(&self) -> Result<Vec<Root>> {
-    let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
+    let conn = self
+      .conn
+      .lock()
+      .map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
     let mut stmt = conn.prepare("SELECT id, path, enabled FROM roots ORDER BY id ASC")?;
     let rows = stmt.query_map([], |row| {
       Ok(Root {
@@ -69,7 +81,10 @@ impl Database {
   }
 
   pub fn add_root(&self, path: &str) -> Result<()> {
-    let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
+    let conn = self
+      .conn
+      .lock()
+      .map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
     conn.execute(
       "INSERT OR IGNORE INTO roots (path, enabled) VALUES (?1, 1)",
       params![path],
@@ -78,13 +93,19 @@ impl Database {
   }
 
   pub fn remove_root(&self, root_id: i64) -> Result<()> {
-    let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
+    let conn = self
+      .conn
+      .lock()
+      .map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
     conn.execute("DELETE FROM roots WHERE id = ?1", params![root_id])?;
     Ok(())
   }
 
   pub fn upsert_file_candidate(&self, item: &FileCandidate) -> Result<()> {
-    let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
+    let conn = self
+      .conn
+      .lock()
+      .map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
     conn.execute(
       "INSERT INTO files (
         root_id, path, parent_path, filename, stem, extension, mime, size_bytes, modified_at_fs, fingerprint, index_status
@@ -117,7 +138,10 @@ impl Database {
   }
 
   pub fn mark_missing_files_by_root(&self, root_id: i64, existing_paths: &[String]) -> Result<()> {
-    let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
+    let conn = self
+      .conn
+      .lock()
+      .map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
     if existing_paths.is_empty() {
       conn.execute(
         "UPDATE files SET exists_flag = 0, index_status = 'pending' WHERE root_id = ?1",
@@ -141,7 +165,10 @@ impl Database {
   }
 
   pub fn list_pending_index_files(&self, limit: usize) -> Result<Vec<(i64, String, String)>> {
-    let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
+    let conn = self
+      .conn
+      .lock()
+      .map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
     let mut stmt = conn.prepare(
       "SELECT id, path, filename FROM files WHERE exists_flag = 1 AND index_status = 'pending' ORDER BY id ASC LIMIT ?1",
     )?;
@@ -156,7 +183,10 @@ impl Database {
   }
 
   pub fn mark_indexed(&self, file_id: i64) -> Result<()> {
-    let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
+    let conn = self
+      .conn
+      .lock()
+      .map_err(|_| anyhow::anyhow!("db lock poisoned"))?;
     conn.execute(
       "UPDATE files SET index_status = 'indexed', last_indexed_at = CURRENT_TIMESTAMP WHERE id = ?1",
       params![file_id],

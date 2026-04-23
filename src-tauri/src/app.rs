@@ -1,7 +1,3 @@
-use crate::command::{
-  add_root, get_index_status, get_settings, list_roots, remove_root, search, start_full_scan,
-  update_settings,
-};
 use crate::state::AppState;
 use crate::util::logging::init_logging;
 
@@ -12,14 +8,14 @@ pub fn build_app() {
   tauri::Builder::default()
     .manage(state)
     .invoke_handler(tauri::generate_handler![
-      get_settings,
-      update_settings,
-      list_roots,
-      add_root,
-      remove_root,
-      start_full_scan,
-      get_index_status,
-      search,
+      crate::command::get_settings,
+      crate::command::update_settings,
+      crate::command::list_roots,
+      crate::command::add_root,
+      crate::command::remove_root,
+      crate::command::start_full_scan,
+      crate::command::get_index_status,
+      crate::command::search,
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");

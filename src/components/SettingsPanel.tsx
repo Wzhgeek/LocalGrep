@@ -34,7 +34,7 @@ export function SettingsPanel() {
   const onAddAndScan = async () => {
     const trimmed = path.trim();
     if (!trimmed) {
-      setMessage('请先填写要索引的目录绝对路径。');
+      setMessage('填写绝对路径后再扫描。');
       return;
     }
     setBusy(true);
@@ -42,7 +42,7 @@ export function SettingsPanel() {
     try {
       await addRoot(trimmed);
       await startFullScan();
-      setMessage('已加入目录并开始扫描，请稍等几秒后再在左侧搜索。');
+      setMessage('已排队扫描；数秒后可检索。');
       setPath('');
       await refresh();
     } catch (e) {
@@ -53,40 +53,40 @@ export function SettingsPanel() {
   };
 
   return (
-    <section className="settings-panel">
-      <h3>索引目录</h3>
-      <p className="settings-hint">
-        搜索前必须先添加至少一个目录并完成扫描。可填本仓库源码目录做测试，例如：
+    <div>
+      <div className="rail-divider" />
+      <h3 className="rail-section-title">数据源</h3>
+      <p className="rail-hint">
+        未索引则无命中。测试可填本仓库源码目录，例如：
         <code>/Volumes/CodeandDataset/FileSearchTool/src</code>
       </p>
-      <div className="settings-row">
+      <div className="rail-field-row">
         <input
+          className="rail-input"
           type="text"
           value={path}
           onChange={(e) => setPath(e.target.value)}
-          placeholder="/绝对路径/到/要索引的文件夹"
+          placeholder="/绝对路径/目录"
           disabled={busy}
         />
-        <button type="button" onClick={() => void onAddAndScan()} disabled={busy}>
-          {busy ? '处理中…' : '添加并扫描'}
+        <button className="rail-btn" type="button" onClick={() => void onAddAndScan()} disabled={busy}>
+          {busy ? '扫描中…' : '添加并扫描'}
         </button>
       </div>
-      {message ? <p className="settings-message">{message}</p> : null}
-      <h4>已添加根目录</h4>
-      <ul className="settings-roots">
-        {roots.length === 0 ? <li>（暂无）</li> : null}
+      {message ? <p className="rail-msg">{message}</p> : null}
+      <h4 className="rail-section-title is-spaced">根目录</h4>
+      <ul className="rail-list">
+        {roots.length === 0 ? <li>（无）</li> : null}
         {roots.map((r) => (
-          <li key={r.id}>
-            <code>{r.path}</code>
-          </li>
+          <li key={r.id}>{r.path}</li>
         ))}
       </ul>
-      <h4>索引状态</h4>
-      <p className="settings-status">
+      <h4 className="rail-section-title is-spaced">索引队列</h4>
+      <p className="rail-status">
         {status
-          ? `已入库文件: ${status.indexed_files} · 待处理任务: ${status.pending_tasks}`
-          : '加载中…'}
+          ? `已入库 ${status.indexed_files} · 待处理 ${status.pending_tasks}`
+          : '读取中…'}
       </p>
-    </section>
+    </div>
   );
 }

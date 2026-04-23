@@ -1,19 +1,19 @@
 export function FilterPanel() {
   return (
-    <aside className="filter-panel">
-      <h3>过滤器</h3>
-      <label>
+    <div>
+      <h3 className="rail-section-title">过滤</h3>
+      <label className="rail-option">
         <input type="checkbox" defaultChecked />
-        仅文件名
+        <span>仅匹配文件名</span>
       </label>
-      <label>
+      <label className="rail-option">
         <input type="checkbox" />
-        排除隐藏文件
+        <span>排除隐藏项</span>
       </label>
-      <label>
+      <label className="rail-option">
         <input type="checkbox" defaultChecked />
-        抽取成功优先
+        <span>仅已抽取内容</span>
       </label>
-    </aside>
+    </div>
   );
 }

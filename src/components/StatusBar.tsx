@@ -6,10 +6,14 @@ type StatusBarProps = {
 
 export function StatusBar({ total, tookMs, searchError }: StatusBarProps) {
   return (
-    <footer className="status-bar">
-      <span>搜索结果: {total}</span>
-      <span>查询耗时: {tookMs}ms</span>
-      {searchError ? <span className="status-bar-error">搜索错误: {searchError}</span> : null}
+    <footer className="chrome-bottom">
+      <span>
+        命中数 <strong>{total}</strong>
+      </span>
+      <span>
+        查询耗时 <strong>{tookMs} ms</strong>
+      </span>
+      {searchError ? <span className="chrome-bottom-error">错误: {searchError}</span> : null}
     </footer>
   );
 }

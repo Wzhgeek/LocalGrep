@@ -67,6 +67,7 @@ npm run test
 npm run build
 
 # 后端：格式化与静态检查（需在 src-tauri 目录下且已安装 Rust 工具链）
+# 缩进为 2 空格，由 src-tauri/rustfmt.toml 配置
 cd src-tauri
 cargo fmt --all -- --check
 cargo clippy --all-targets --all-features -- -D warnings

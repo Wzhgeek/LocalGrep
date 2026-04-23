@@ -1,0 +1,47 @@
+# 依赖与构建产物
+node_modules/
+dist/
+src-tauri/target/
+src-tauri/gen/
+tsconfig.tsbuildinfo
+
+# 本地运行数据（SQLite / Tantivy 索引，勿提交）
+.data/
+
+# 设计文档与计划（本地/私有，不纳入版本库）
+plan/
+
+# 环境变量
+.env
+.env.*
+!.env.example
+
+# 日志与临时文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# IDE / 编辑器
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# 测试与覆盖率
+coverage/
+.nyc_output/
+
+# 其他
+*.local
+
+# Tauri `icon` 子命令生成的移动端资源（本仓库仅桌面端）
+src-tauri/icons/android/
+src-tauri/icons/ios/

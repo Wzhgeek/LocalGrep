@@ -1,0 +1,2 @@
+# 与项目现有 2 空格缩进一致；否则默认 rustfmt 为 4 空格，会在 CI 中 `cargo fmt -- --check` 失败。
+tab_spaces = 2
